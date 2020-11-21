@@ -118,8 +118,22 @@ optional<string> normalise_path(string &path) {
     auto data_str = path.substr(actual_pos + offset);
     // nuke backslash
     string_replace(data_str, "\\", "/");
-    // nuke double slash
-    string_replace(data_str, "//", "/");
+    //nuke any repeat slash
+    const string replaced_string("/");
+    const string string_to_replace("//");
+
+    //First time, we will see if we find the string
+    int pos = data_str.find(string_to_replace);
+
+    while (pos != string::npos)
+    {
+        //Erase the targeted string at the location we set
+        data_str.erase(pos, string_to_replace.length());
+        //Insert the new string where we last deleted the old string
+        data_str.insert(pos, replaced_string);
+        //Get position of targeted string to erase
+        pos = data_str.find(string_to_replace);
+    }
 
     return data_str;
 }
