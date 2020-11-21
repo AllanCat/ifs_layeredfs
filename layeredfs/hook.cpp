@@ -253,9 +253,22 @@ void parse_texturelist(string const&path, string const&norm_path, optional<strin
     auto ifs_mod_path = ifs_path;
     string_replace(ifs_mod_path, ".ifs", "_ifs");
 
+    logf_verbose("search mod folder: %s", ifs_mod_path.c_str());
     if (!find_first_modfolder(ifs_mod_path)) {
-        logf_verbose("mod folder doesn't exist, skipping");
-        return;
+        if (ifs_mod_path.rfind(std::string(MOD_FOLDER).substr(2), 0) == 0) {
+            logf_verbose("mod folder starts with ./data_mods");
+            //norm_path was demangled and starts with ./data_mods, try remove ./data_mods/[mod_name]/ for search
+            auto pos = find_Nth(ifs_mod_path, 2, "/");
+            if (pos != string::npos) {
+                ifs_mod_path = ifs_mod_path.substr(pos + 1);
+                logf_verbose("new mod folder: %s", ifs_mod_path.c_str());
+            }
+        }
+        logf_verbose("search mod folder(2): %s", ifs_mod_path.c_str());
+        if (!find_first_modfolder(ifs_mod_path)) {
+            logf_verbose("mod folder doesn't exist, skipping");
+            return;
+        }
     }
 
     // open the correct file

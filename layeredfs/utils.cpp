@@ -80,6 +80,29 @@ wchar_t *str_widen(const char *src)
     return result;
 }
 
+size_t find_Nth(
+    const std::string & str,   // where to work
+    unsigned            N,     // N'th ocurrence
+    const std::string & find    // what to 'find'
+) {
+    if (0 == N) { return std::string::npos; }
+    size_t pos, from = 0;
+    unsigned i = 0;
+    while (i < N) {
+        pos = str.find(find, from);
+        if (std::string::npos == pos) { break; }
+        from = pos + 1; // from = pos + find.size();
+        ++i;
+    }
+    return pos;
+    /**
+    It would be more efficient to use a variation of KMP to
+    benefit from the failure function.
+    - Algorithm inspired by James Kanze.
+    - http://stackoverflow.com/questions/20406744/
+    */
+}
+
 bool file_exists(const char* name) {
     auto res = avs_fs_open(name, 1, 420);
     if (res > 0)

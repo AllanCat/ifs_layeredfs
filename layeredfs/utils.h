@@ -23,6 +23,11 @@ void string_replace(std::string &str, const char* from, const char* to);
 wchar_t *str_widen(const char *src);
 void str_tolower_inline(char* str);
 void str_tolower_inline(std::string &str);
+size_t find_Nth(
+    const std::string & str,   // where to work
+    unsigned            N,     // N'th ocurrence
+    const std::string & find    // what to 'find'
+);
 bool file_exists(const char* name);
 bool folder_exists(const char* name);
 std::vector<std::string> folders_in_folder(const char* root);
